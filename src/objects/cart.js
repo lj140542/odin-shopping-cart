@@ -19,7 +19,7 @@ export async function insertCart(insertion) {
     cart[cartItemIndex].quantity += insertion.quantity;
 
   await set(cart);
-  return newCartItem;
+  return cart;
 }
 
 export async function updateCart(id, quantity) {
@@ -44,23 +44,12 @@ export async function deleteCart(id) {
   return false;
 }
 
-export async function countCart(cart = null) {
-  if (!cart) cart = await getCart();
-  let count = 0;
-  cart.forEach(element => count += element.quantity);
-  return count;
-}
-
-export function totalCart(cart) {
-  return cart.reduce((total, cartItem) => total + cartItem.item.price * cartItem.quantity, 0);
-}
-
-export function clearCart(cart) {
-  cart = [];
-  set(cart);
+export async function clearCart() {
+  const cart = [];
+  await set(cart);
   return cart;
 }
 
-function set(cart) {
-  return localforage.setItem("cart", cart);
+async function set(cart) {
+  return await localforage.setItem("cart", cart);
 }

@@ -32,11 +32,6 @@ describe("Cart", () => {
     expect(cart).toStrictEqual([]);
   });
 
-  it("should return the added item when adding an item to the cart", async () => {
-    let item = { item: { id: 1, name: "insertTest" }, quantity: 1 };
-    expect(await insertCart(item)).toMatchObject(item);
-  });
-
   it("should return all the item in the cart when using getCart after adding items", async () => {
     await insertCart(items[0]);
     await insertCart(items[1]);
@@ -48,10 +43,11 @@ describe("Cart", () => {
   });
 
   it("should update the quantity of the item in the cart", async () => {
-    const updateId = (await insertCart(items[0])).id;
+    let cart = await insertCart(items[0])
+    const updateId = cart[0].id;
     expect(await updateCart(updateId, 20)).toBe(true);
 
-    const cart = await getCart();
+    cart = await getCart();
     expect(cart[0].quantity).toBe(20);
   })
 
@@ -62,10 +58,13 @@ describe("Cart", () => {
 
   it("should delete an item from the cart", async () => {
     await insertCart(items[0]);
-    const deleteId = (await insertCart(items[1])).id;
+    let cart = await insertCart(items[1]);
+
+    const deleteId = cart[0].id
 
     expect(await deleteCart(deleteId)).toEqual(true);
-    const cart = await getCart();
+    cart = await getCart();
+
     expect(cart.length).toBe(1);
     expect(cart[0]).toMatchObject(items[0]);
   });
@@ -86,44 +85,5 @@ describe("Cart", () => {
     cart = await getCart();
     expect(cart.length).toBe(1);
     expect(cart[0].quantity).toBe(items[0].quantity * 2);
-  });
-
-  it("should return the correct count regardless of the number of different items", async () => {
-    let cart;
-
-    await insertCart(items[0]);
-    await insertCart(items[0]);
-    cart = await getCart();
-    expect(cart.length).toBe(1);
-    expect(await countCart()).toBe(items[0].quantity * 2);
-
-    await insertCart(items[1]);
-    cart = await getCart();
-    expect(cart.length).toBe(2);
-    // here we use the second way to call countCart by providing the cart 
-    expect(await countCart(cart)).toBe(items[0].quantity * 2 + items[1].quantity);
-  });
-
-  it("should return a total of 0 for an empty cart", async () => {
-    expect(await totalCart(await getCart())).toBe(0);
-  });
-
-  it("should return the total amount of the cart", async () => {
-    let total = items[0].item.price * 2 + items[1].item.price;
-    await insertCart(items[0]);
-    await insertCart(items[0]);
-    await insertCart(items[1]);
-    expect(await totalCart(await getCart())).toBe(total);
-  });
-
-  it("should reset all when clearing the cart", async () => {
-    let cart;
-    await insertCart(items[0]);
-    await insertCart(items[0]);
-    await insertCart(items[1]);
-    cart = await clearCart(await getCart())
-    expect(cart.length).toBe(0);
-    expect(await countCart(cart)).toBe(0);
-    expect(await totalCart(cart)).toBe(0);
   });
 });

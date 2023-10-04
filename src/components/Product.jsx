@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { insertCart } from '../objects/cart'
+import { useContext } from 'react';
+import { CartContext } from '../routes/Root-Page';
 
 export default function Product({ product, card }) {
+  const { handleCartInteraction } = useContext(CartContext);
   const price = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price);
   if (card) {
     return (
@@ -38,7 +40,7 @@ export default function Product({ product, card }) {
         <button
           className='self-end bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text'
           type='button'
-          onClick={() => insertCart({ item: product, quantity: 1 })}
+          onClick={() => handleCartInteraction('insert',{ item: product, quantity: 1 })}
         >
           Add to cart
         </button>
