@@ -6,7 +6,7 @@ export default function CartItem({ item, quantity }) {
 
   return (
     <>
-      <hr className='opacity-25' />
+      <hr className='opacity-25 w-[95%] justify-self-center' />
       <div className='grid grid-cols-[1fr_2fr_1fr_1fr] gap-2
       items-center justify-center text-center p-4 text-sm'>
         <img src={`/${item.id}.png`} alt={item.title}
