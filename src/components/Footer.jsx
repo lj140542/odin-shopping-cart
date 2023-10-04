@@ -1,7 +1,8 @@
 import Icon from '@mdi/react';
 import { mdiGithub } from '@mdi/js';
+import { memo } from 'react';
 
-export default function Footer() {
+const Footer = memo(function Footer() {
   return (
     <footer
       className='
@@ -17,5 +18,7 @@ export default function Footer() {
         made by Jonathan Lefebvre
       </a>
     </footer>
-  )
-}
+  );
+});
+
+export default Footer;

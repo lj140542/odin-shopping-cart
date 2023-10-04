@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useState, memo } from "react"
 import Icon from '@mdi/react'
 import { mdiCart } from '@mdi/js'
 import Dropdown from "./Dropdown"
@@ -13,7 +13,7 @@ const shopOptions = [
   { name: "Women's clothing", description: "All the garment that were most popular 5 years ago.", link: "shop/women's clothing" },
 ]
 
-export default function Header() {
+const Header = memo(function Header() {
   const [cartVisible, setCartVisible] = useState(false);
   return (
     <>
@@ -38,4 +38,6 @@ export default function Header() {
       <Cart visible={cartVisible} visibleSetter={setCartVisible} />
     </>
   )
-}
+})
+
+export default Header;
