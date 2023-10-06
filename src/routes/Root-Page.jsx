@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { getCart, insertCart, clearCart } from "../objects/cart";
+import { getCart, insertCart, clearCart, updateCart } from "../objects/cart";
 import { useState, useEffect, useMemo, createContext } from "react";
 
 export const CartContext = createContext(null);
@@ -19,12 +19,16 @@ export default function RootPage() {
     return { cartItemCount: count, cartTotal: total }
   }, [cart])
 
-  const handleCartInteraction = async (type, insertion = null) => {
+  const handleCartInteraction = async (type, parameters = null) => {
     switch (type) {
       case 'clear': return setCart(await clearCart());
+      case 'update': {
+        if (await updateCart(parameters.cartElementId, parameters.newQuantity)) return setCart(await getCart());
+        else throw new Error("error while updating cart quantity");
+      }
       case 'insert': {
-        if (insertion == null) throw new Error("insertion parameter is null");
-        else return setCart(await insertCart(insertion));
+        if (parameters.insertion == null) throw new Error("insertion parameter is null");
+        else return setCart(await insertCart(parameters.insertion));
       }
       default: throw new Error("unknown type: " + type);
     }

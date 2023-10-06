@@ -46,8 +46,8 @@ export default function Product({ product, card }) {
           <button
             className='bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text'
             type='button'
-            onClick={() => { 
-              handleCartInteraction('insert', { item: product, quantity: quantity });
+            onClick={() => {
+              handleCartInteraction('insert', { insertion: { item: product, quantity: quantity } });
               setQuantity(1);
             }}
           >
