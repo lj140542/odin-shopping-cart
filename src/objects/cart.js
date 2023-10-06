@@ -15,8 +15,10 @@ export async function insertCart(insertion) {
   let cartItemIndex = cart.findIndex(element => element.item.id == insertion.item.id);
   if (cartItemIndex == -1)
     cart.unshift(newCartItem);
-  else
-    cart[cartItemIndex].quantity += insertion.quantity;
+  else {
+    let newQuantity = cart[cartItemIndex].quantity + insertion.quantity;
+    cart[cartItemIndex].quantity = newQuantity > 99 ? 99 : newQuantity;
+  }
 
   await set(cart);
   return cart;
