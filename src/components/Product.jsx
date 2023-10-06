@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { CartContext } from '../routes/Root-Page';
+import QuantitySelector from './Quantity-Selector';
 
 export default function Product({ product, card }) {
+  const [quantity, setQuantity] = useState(1);
   const { handleCartInteraction } = useContext(CartContext);
   const price = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price);
   if (card) {
@@ -37,13 +39,21 @@ export default function Product({ product, card }) {
         <h2>{product.title}</h2>
         <p className='text-2xl'>{price}</p>
         <p className='text-justify'>{product.description}</p>
-        <button
-          className='self-end bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text'
-          type='button'
-          onClick={() => handleCartInteraction('insert',{ item: product, quantity: 1 })}
-        >
-          Add to cart
-        </button>
+        <div className='grid gap-8 items-center
+          sm:grid-rows-2 sm:grid-cols-1 sm:justify-center
+          lg:grid-cols-2 lg:grid-rows-1 lg:justify-between'>
+          <QuantitySelector quantity={quantity} quantityChangeHandler={setQuantity} />
+          <button
+            className='bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text'
+            type='button'
+            onClick={() => { 
+              handleCartInteraction('insert', { item: product, quantity: quantity });
+              setQuantity(1);
+            }}
+          >
+            Add to cart
+          </button>
+        </div>
       </div>
     </div>
   )
