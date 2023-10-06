@@ -37,7 +37,10 @@ export default function Cart({ visible, visibleSetter }) {
           <h3 className='pt-2'>{cartItemCount} item(s)</h3>
           <div className='max-h-[75%] overflow-y-scroll pt-4'>
             <div id='cart-item-list' className='grid grid-rows-[min-content] auto-rows-min grid-cols-1 h-full items-start'>
-              {cart.map(element => <CartItem key={element.id} item={element.item} quantity={element.quantity} />)}
+              {cart.map(element =>
+                <CartItem key={element.id} id={element.id} item={element.item} quantity={element.quantity}
+                  quantityChangeHandler={(cartElementId, newQuantity) => handleCartInteraction('update', { cartElementId, newQuantity })} />
+              )}
             </div>
           </div>
           <hr />
